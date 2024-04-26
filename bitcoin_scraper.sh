@@ -17,7 +17,11 @@ low_rate=$(echo "$low_rate" | tr -d ',' | tr -d '$')
 high_rate=$(echo "$high_rate" | tr -d ',' | tr -d '$')
 
 # Attempt to insert data into MySQL and capture errors
-mysql_output=$(mysql -u root -proot -e "USE bitcoin_data; INSERT INTO bitcoin_prices (current_rate, low_rate, high_rate, timestamp) VALUES ('$current_rate', '$low_rate', '$high_rate', NOW());" 2>&1)
+mysql_output=$(mysql -u root -proot -e "USE bitcoin_data; \
+    INSERT INTO bitcoin_prices (current_rate, timestamp) VALUES ('$current_rate', NOW()); \
+    SET @last_id = LAST_INSERT_ID(); \
+    INSERT INTO bitcoin_price_details (bitcoin_price_id, low_rate, high_rate) VALUES (@last_id, '$low_rate', '$high_rate');" 2>&1)
+
 
 if [[ $? -ne 0 ]]; then
   echo "MySQL error: $mysql_output"
