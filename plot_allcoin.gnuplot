@@ -18,7 +18,7 @@ set timefmt "%Y-%m-%d %H:%M:%S"
 set format x "%Y-%m-%d\n%H:%M:%S"
 
 # Increase font size of x-axis labels
-set xtics font ", 10"
+set xtics font ", 7"
 
 # Plot data
 plot "Binance_coin.csv" using 3:2 with linespoints title "Binance Coin Price", \
